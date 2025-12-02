@@ -1,5 +1,6 @@
 // day01.c - Advent of Code Day 01 (Parts 1 and 2)
 // C23, stdlib-only
+
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
