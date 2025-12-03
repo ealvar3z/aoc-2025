@@ -14,8 +14,8 @@ sub read_banks () {
     }
 
     my $banks = c(@lines)
-        ->map(sub ($s) { trim($s) })
-        ->grep(sub ($s) { length $s })
+        ->map(sub ($l) { trim($l) })
+        ->grep(sub ($l) { length $l })
         ->to_array;
 
     return $banks;   # arrayref of strings
