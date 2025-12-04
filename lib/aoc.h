@@ -1,3 +1,7 @@
+#ifndef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200809L
+#endif // !_POSIX_C_SOURCE
+
 #ifndef AOC_H_INCLUDED
 #define AOC_H_INCLUDED 1
 
@@ -8,6 +12,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 typedef unsigned char uchar;
 typedef unsigned short ushort;
@@ -132,6 +137,11 @@ grid_load(AocGrid *g, FILE *fp)
 {
     if (g == NULL || fp == NULL) {
         return false;
+    }
+
+    // TTY interactivity check
+    if (fp == stdin && isatty(fileno(fp))) {
+      return false;
     }
 
     g->h = 0;
