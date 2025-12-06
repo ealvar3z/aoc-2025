@@ -36,7 +36,7 @@ typedef uint64_t u64;
 # endif
 
 # ifndef AOC_MAX_W
-#  define AOC_MAX_W 256
+#  define AOC_MAX_W 4096
 # endif
 
 # define ARRAY_LEN(a) (sizeof(a) / sizeof((a)[0]))
@@ -162,6 +162,12 @@ grid_load(AocGrid *g, FILE *fp)
 
 	g->h = 0;
 	g->w = 0;
+	// init grid to spaces (Day 6 boinked original API)
+	for (int r = 0; r < AOC_MAX_H; r++) {
+		for (int c = 0; c < AOC_MAX_W; c++) {
+			g->cells[r][c] = ' ';
+		}
+	}
 
 	char buf[AOC_MAX_W + 4];
 	while (g->h < AOC_MAX_H && read_line(fp, buf, sizeof buf)) {
@@ -170,17 +176,17 @@ grid_load(AocGrid *g, FILE *fp)
 		}
 
 		int len = (int)strlen(buf);
+		while (len > 0 && (buf[len - 1] == ' ' || buf[len - 1] == '\t')) {
+			buf[--len] = '\0';
+		}
 		if (len > AOC_MAX_W) {
 			fprintf(stderr, "Grid line too wide (%d > %d)\n", len,
 			    AOC_MAX_W);
 			exit(EXIT_FAILURE);
 		}
 
-		if (g->w == 0) {
+		if (len > g->w) {
 			g->w = len;
-		} else if (len != g->w) {
-			fprintf(stderr, "Inconsistent row width in grid\n");
-			exit(EXIT_FAILURE);
 		}
 
 		for (int c = 0; c < len; c++) {
