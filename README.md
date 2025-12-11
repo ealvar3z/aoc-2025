@@ -1,3 +1,3 @@
 # aoc-2025
 
-Solutions in C, LuaJIT & Perl
+Solutions in C, Go, LuaJIT & Perl
