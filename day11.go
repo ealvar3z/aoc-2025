@@ -1,4 +1,3 @@
-// day11_part2.go
 package main
 
 import (
