@@ -24,17 +24,6 @@
 # define MAX_LINE 8192
 #endif
 
-static void *
-xrealloc(void *p, size_t n)
-{
-	void *q = realloc(p, n);
-	if (!q) {
-		fprintf(stderr, "out of memory\n");
-		exit(EXIT_FAILURE);
-	}
-	return q;
-}
-
 typedef struct {
 	int x;
 	int y;
