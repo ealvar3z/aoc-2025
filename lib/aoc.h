@@ -58,6 +58,18 @@ typedef uint64_t u64;
 #define CLAMP(x, lo, hi) \
     (MAX((lo), MIN((x), (hi))))
 
+
+static void *
+xrealloc(void *p, size_t n)
+{
+	void *q = realloc(p, n);
+	if (!q) {
+		fprintf(stderr, "out of memory\n");
+		exit(EXIT_FAILURE);
+	}
+	return q;
+}
+
 static inline int
 modi(int value, int m)
 {
@@ -285,6 +297,57 @@ bfs_shortest(const AocGrid *g, int sr, int sc, int tr, int tc,
 	}
 
 	return -1; // unreachable
+}
+
+static char *
+xstrdup(const char *s)
+{
+    size_t n = strlen(s) + 1;
+    char *p = (char *)malloc(n);
+    if (p == NULL) {
+        fprintf(stderr, "out of memory\n");
+        exit(EXIT_FAILURE);
+    }
+    memcpy(p, s, n);
+    return p;
+}
+
+static char *
+trim_inplace(char *s)
+{
+    while (*s && isspace((unsigned char)*s)) {
+        s++;
+    }
+    char *end = s + strlen(s);
+    while (end > s && isspace((unsigned char)end[-1])) {
+        end--;
+    }
+    *end = '\0';
+    return s;
+}
+
+// Split on whitespace into tokens; returns count, writes pointers into out[].
+// Modifies the input string.
+static int
+split_fields(char *s, char **out, int out_cap)
+{
+    int n = 0;
+    while (*s) {
+        while (*s && isspace((unsigned char)*s)) {
+            s++;
+        }
+        if (!*s) break;
+        if (n >= out_cap) break;
+        out[n++] = s;
+        while (*s && !isspace((unsigned char)*s)) {
+            s++;
+        }
+        if (*s) {
+            *s = '\0';
+            s++;
+        }
+    }
+    return n;
 }
 
 #endif /* AOC_H_INCLUDED */
